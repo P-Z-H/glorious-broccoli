@@ -23,7 +23,16 @@ let TRD3   = \t -> t (\x y z -> z)
 -------------------------------------------------------------------------------
 eval or_ff_tt :
       OR FALSE TRUE
-      -- (a) fill in your reductions here
+  =d> (\b1 b2 -> ITE b1 TRUE b2) FALSE TRUE
+  =b> (\b2 -> ITE FALSE TRUE b2) TRUE
+  =b> ITE FALSE TRUE TRUE
+  =d> (\b x y -> b x y) FALSE TRUE TRUE
+  =b> (\x y -> FALSE x y) TRUE TRUE
+  =b> (\y -> FALSE TRUE y) TRUE
+  =b> FALSE TRUE TRUE
+  =d> (\x y -> y) TRUE TRUE
+  =b> (\y -> y) TRUE
+  =b> TRUE
   =d> TRUE
 
 eval snd_snd_pairs :
@@ -33,10 +42,30 @@ eval snd_snd_pairs :
   =b> SND (SND ((\x y b -> b x y) apple (\b -> b banana grape)))
   =b> SND (SND ((\y b -> b apple y) (\b -> b banana grape)))
   =b> SND (SND (\b -> b apple (\b -> b banana grape)))
-      -- (b) fill in your reductions here to complete the evaluation
+  =d> SND ((\p -> p FALSE) (\b -> b apple (\b -> b banana grape)))
+  =b> SND ((\b -> b apple (\b -> b banana grape)) FALSE)
+  =b> SND (FALSE apple (\b -> b banana grape))
+  =d> (\p -> p FALSE) (FALSE apple (\b -> b banana grape))
+  =b> (FALSE apple (\b -> b banana grape)) FALSE
+  =d> ((\x y -> y) apple (\b -> b banana grape)) FALSE
+  =b> ((\y -> y) (\b -> b banana grape)) FALSE
+  =b> (\b -> b banana grape) FALSE
+  =b> FALSE banana grape
+  =d> (\x y -> y) banana grape
+  =b> (\y -> y) grape
+  =b> grape
   =d> grape
 
 eval third_triple :
       TRD3 (TRIPLE apple banana grape)
-      -- (c) fill in your reductions here
+  =d> (\t -> t (\x y z -> z)) (TRIPLE apple banana grape)
+  =b> TRIPLE apple banana grape (\x y z -> z)
+  =d> (\x y z s -> s x y z) apple banana grape (\x y z -> z)
+  =b> (\y z s -> s apple y z) banana grape (\x y z -> z)
+  =b> (\z s -> s apple banana z) grape (\x y z -> z)
+  =b> (\s -> s apple banana grape) (\x y z -> z)
+  =b> (\x y z -> z) apple banana grape
+  =b> (\y z -> z) banana grape
+  =b> (\z -> z) grape
+  =b> grape
   =d> grape

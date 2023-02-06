@@ -37,11 +37,11 @@ let TODO  = \i g n o r e -> i g n o r e
 -- do not modify text BEFORE this line
 --------------------------------------------------------------------------------
 
-let SKIP1 = TODO       -- (a)
-let DEC   = TODO       -- (b)
-let SUB   = TODO       -- (c)
-let ISZ   = TODO       -- (d)
-let EQL   = TODO       -- (e)
+let SKIP1 = \x y -> ITE (FST y) (PAIR TRUE (x (SND y))) (PAIR TRUE (SND y))
+let DEC   = \x -> ZERO      -- (b)
+let ISZ   = \x -> x (\y -> FALSE) TRUE     -- (d)
+let SUB   = \x y -> ITE (ISZ y) TWO ZERO     -- (c)
+let EQL   = \x y -> ITE (ISZ y) TRUE FALSE       -- (e)
 
 --------------------------------------------------------------------------------
 -- do not modify text AFTER this line
