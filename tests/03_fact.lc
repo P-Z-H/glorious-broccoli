@@ -44,9 +44,11 @@ let TODO  = \i g n o r e -> i g n o r e
 -- do not modify text BEFORE this line
 --------------------------------------------------------------------------------
 
-let FactBase = TODO       -- (a)
-let FactFunc = TODO       -- (b)
-let FactOut  = TODO       -- (c)
+let ISZ   = \x -> x (\y -> FALSE) TRUE
+
+let FactBase = ZERO      -- (a)
+let FactFunc = \x -> ITE (ISZ x) (ONE) (MUL x (INC x))        -- (b)
+let FactOut  = \x -> ITE (ISZ x) ONE x     -- (c)
 
 let FACT     = \n -> FactOut (n FactFunc FactBase)   
 
